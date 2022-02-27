@@ -1,0 +1,7 @@
+.gradle/
+.idea/
+build/
+classes/
+dist/
+out/
+Thumbs.db

@@ -1,0 +1,3 @@
+Package-Title: kevw.games.chq
+Package-Version: 1.0
+Package-Vendor: Kevin Wise

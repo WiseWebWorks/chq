@@ -1,0 +1,372 @@
+X-UIDL: <000001c575db$b8f94a40$0200a8c0@General>
+X-Mozilla-Status: 0013
+X-Mozilla-Status2: 00000000
+Return-Path: <generalhq@earthlink.net>
+Received: from lakermgxi08.cox.net ([205.158.62.67])
+          by lakermmtai18.cox.net
+          (InterMail vM.6.01.04.00 201-2131-118-20041027) with ESMTP
+          id <20050620210502.HHH1326.lakermmtai18.cox.net@lakermgxi08.cox.net>
+          for <wisekb@cox.net>; Mon, 20 Jun 2005 17:05:02 -0400
+Received: from webmail-outgoing.us4.outblaze.com ([205.158.62.67])
+          by lakermgxi08.cox.net
+          (InterMail vG.1.00.00.00 201-2136-104-20040331) with ESMTP
+          id <20050620210502.PTLT21457.lakermgxi08.cox.net@webmail-outgoing.us4.outblaze.com>
+          for <wisekb@cox.net>; Mon, 20 Jun 2005 17:05:02 -0400
+Received: from mta1-8.us4.outblaze.com (unknown [192.168.9.154])
+	by webmail-outgoing.us4.outblaze.com (Postfix) with SMTP id EBA461800137
+	for <wisekb@cox.net>; Mon, 20 Jun 2005 21:05:02 +0000 (GMT)
+Received: (qmail 7770 invoked by uid 1001); 20 Jun 2005 21:05:02 -0000
+MBOX-Line: From generalhq@earthlink.net Mon Jun 20 21:05:02 2005
+Delivered-To: kbwise:who.net@mail.com
+Received: (qmail 7560 invoked by uid 0); 20 Jun 2005 21:05:02 -0000
+X-OB-Received: from unknown (205.158.62.26)
+  by mta1-8.us4.outblaze.com; 20 Jun 2005 21:05:02 -0000
+Received: from smtpauth01.mail.atl.earthlink.net (smtpauth01.mail.atl.earthlink.net [209.86.89.61])
+	by spf4.us4.outblaze.com (Postfix) with ESMTP id EF48018B940
+	for <kbwise@who.net>; Mon, 20 Jun 2005 21:05:01 +0000 (GMT)
+DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws;
+  s=dk20050327; d=earthlink.net;
+  b=KUHqF+CjPeI7t7v9H8wOw/+QzdmvsBwNoLT+BDBfoQ1uVFRcaUU3cObz3Mh1kTJz;
+  h=Received:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:X-Priority:X-MSMail-Priority:X-Mailer:Importance:In-Reply-To:X-MimeOLE:X-ELNK-Trace:X-Originating-IP;
+Received: from [24.144.71.26] (helo=General)
+	by smtpauth01.mail.atl.earthlink.net with asmtp (Exim 4.34)
+	id 1DkTS1-0006vZ-Eb
+	for kbwise@who.net; Mon, 20 Jun 2005 17:05:01 -0400
+From: "Robert" <generalhq@earthlink.net>
+To: <kbwise@who.net>
+Subject: RE: Command HQ?
+Date: Mon, 20 Jun 2005 17:05:00 -0400
+Message-ID: <000001c575db$b8f94a40$0200a8c0@General>
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook, Build 10.0.6626
+Importance: Normal
+In-Reply-To: <42A89852.80101@cox.net>
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.2527
+X-ELNK-Trace: 309054321c761b77f006df3519701d247e972de0d01da940057763beea56a4ec33a0feaeacf97159350badd9bab72f9c350badd9bab72f9c350badd9bab72f9c
+X-Originating-IP: 24.144.71.26
+X-Loop: kbwise@who.net
+
+
+Well, glad to see you've picked the project back up again!!!
+I sure wish I could. ;-)  Good luck!
+
+It's been SO long since I looked at the code, it took some refreshing to
+figure out what was where. Sorry it took so long to get back to ya.
+
+As for your questions ...
+
+There are 184 possible locations for cities/oil wells in the ???? =
+scenario,
+which basically include all of the locations used in the earlier =
+scenarios,
+plus a bunch more used only in ????.  In that scenario, we basically
+randomly select 84 (NUM_CBR, Number of Cities, Bases, or Resources) of =
+those
+possible 184 (NUM_REGION) locations, and use them. We then go through =
+and
+pick the most inaccessible cities (the ones furthest away from other
+resources) and choose those to be the bases. That's why certain remote =
+spots
+tend to always be bases, and places around city clusters tend not to be. =
+ We
+also then randomly pick a city to be one side's capital, and look for a =
+city
+that is about as equally remote to be the other person's capital, so we
+don't have one cap near all the resources and the other be very remote, =
+in
+order to make it a more fair and even game.
+
+Here is the code snipped that calculates the cities for a Random World, =
+if
+you can make heads or tails of it.  ;-)
+
+(Note:  This code was written by MicroProse, not me... so I am not to be
+blamed for it being very hard to read.  My code tends to be much better
+commented and documented. ;-) )
+
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D start code snippet =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+#define NUM_REGION MAXREGIONS	  /* we currently have 0 to 184 regions */
+
+VOID Random_World(VOID)
+{
+	UWORD i,t,x,y,ty,j,n,c,ct,lp;
+	SWORD d,d2;
+
+redo:
+	lp=3D0;
+	for (i=3D0;i<NUM_REGION;i++){
+		if (A_region[i]!=3D255)
+			A_region[i]=3DNUM_CBR;	/* if assignable set as
+available */
+		}
+	for (i=3D0;i<NUM_CBR;i++){
+		A_cbr_t[i]=3D(i<NUM_CITY)?4:5;
+		A_cbr_wgt[i]=3D0;
+		}
+
+	for (i=3D0;i<NUM_CBR;i++){
+		ty=3DA_cbr_t[i];
+loop:
+		t=3DRandom();
+		while (t>=3DNUM_REGION)
+			t-=3DNUM_REGION;
+		if (A_region[t]!=3DNUM_CBR)	/* if already assigned or
+not assignable */
+			goto loop;
+		x=3Dregion[t].cnx;
+		y=3Dregion[t].cny;
+		if ((ty=3D=3D4)&&(Get_Mpt(x,y)=3D=3D0x0D)){
+				/* no cities in ice */
+			goto loop;
+			}
+		A_region[t]=3Di;		/* assign city to random region */
+#ifdef	REL_CITY_NAMES
+		A_cityregion[i]=3Dt;
+#endif
+		A_cbr_x[i]=3Dx;
+		A_cbr_y[i]=3Dy;
+		}
+
+	for (i=3D0;i<NUM_REGION;i++){
+		if (A_region[i]=3D=3DNUM_CBR){
+=09
+A_region[i]=3DPick_City(region[i].cnx,region[i].cny,1500,1,show_whose)&25=
+5;
+			}
+		}
+
+
+	t=3D0;
+	for (i=3D0;i<NUM_CITY;i++){
+		for (j=3D0;j<NUM_CITY;j++){
+			if (j=3D=3Di)
+				continue;
+=09
+n=3Dget_cbr_dist(A_cbr_x[i],A_cbr_y[i],A_cbr_x[j],A_cbr_y[j]);
+			A_cbr_wgt[i]+=3Dn;
+			}
+		if (A_cbr_wgt[i]>t){
+			t=3DA_cbr_wgt[i];
+			}
+		}
+	t=3Dt+10;
+	for (i=3D0;i<NUM_CITY;i++){
+		A_cbr_wgt[i]=3Dt-A_cbr_wgt[i];
+		}
+
+	for (i=3D0;i<12;i++){
+		t=3D65000;		/* find least accesible cities to be
+bases */
+		for (j=3D0;j<NUM_CITY;j++){
+			if (A_cbr_t[j]!=3D4)
+				continue;
+			if (A_cbr_wgt[j]<t){
+				t=3DA_cbr_wgt[j];
+				n=3Dj;
+				}
+			}
+		A_cbr_t[n]=3D3;	/* make base */
+		x=3DA_cbr_x[n];
+		y=3DA_cbr_y[n];
+		for (j=3D0;j<NUM_CITY;j++){
+			if (Get_Dist(x,y,A_cbr_x[j],A_cbr_y[j])<900)
+				A_cbr_t[j]|=3D0x18;	/* mark all near
+sites so bases don't cluster */
+			}
+		}
+
+	for (i=3D0;i<NUM_CBR;i++){
+		A_cbr_t[i]&=3D7;
+		}
+
+	Cbr_Weight();
+
+
+loop2:
+	c=3Dpick_rnd_city();
+	make_cap(0,c);		/* pic 0 cap */
+	ty=3DA_cbr_wgt[c];
+	x=3DA_cbr_x[c];
+	y=3DA_cbr_y[c];
+
+	n =3D NUM_CITY;
+	for (i=3D0;i<NUM_CITY;i++){	/* find other capital most similar
+to this */
+		t=3Dpick_rnd_city();
+		if
+((A_cbr_t[t]!=3D4)||(Get_Dist(x,y,A_cbr_x[t],A_cbr_y[t])<1500))
+			continue;
+		d=3D(SWORD)A_cbr_wgt[t]-(SWORD)ty;
+		if (0>d) d =3D -d;	/* get ABS */
+		if (16>d) {
+			n =3D t;
+			break;
+		}
+	}
+
+	if (NUM_CITY =3D=3D n){			/* too big a diference, try
+again */
+		A_cbr_t[c]=3D4;				/* reset capital to
+city again */
+		lp++;
+		if (lp>20){
+
+			goto redo;
+		}
+
+		goto loop2;
+	}
+
+	make_cap(1,n);
+}
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D end of snippet =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+As for where the cities and regions are, they are stored in binary in a =
+file
+called 'Regions.Dat' ...  Here is the code snippet to read that file.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D start of snippet =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+UWORD Read_Regions (VOID)
+{
+    UWORD i,j,n;
+
+	/* Open the REGIONS.DAT file for the Earth map. */
+
+	if ( (datafile =3D fopen("regions.dat","rb"))=3D=3DNULL)      {
+		printf("Could not open the data file: regions.dat.\n");
+		return(0);
+		}
+
+	for (i=3D0 ; i<MAXREGIONS ; i++)	{
+		n=3Dfgetc(datafile);
+		chk_derr();
+		region[i].cnx =3D (UWORD)fgetc(datafile)+n*256;
+		chk_derr();
+		n=3Dfgetc(datafile);
+		chk_derr();
+		region[i].cny =3D (UWORD)fgetc(datafile)+n*256;
+		chk_derr();
+		for (j=3D0; j<8 ; j++){
+			n=3Dfgetc(datafile);
+			chk_derr();
+			region[i].rpts[j] =3D (UWORD)fgetc(datafile)+n*256;
+			}
+		}
+	fclose(datafile);
+
+
+	/* Initialize cities using random_city_seed. */
+	srand(random_city_seed);	/* Re-seed random number generator.
+*/
+
+	for( i=3D0; i<NUM_CBR; i++ ) {
+
+
+try_again:
+
+/* FR: Corrected City Random for position of cities in "even" 0-319. */
+/* FR: Last was limited to 0-255. At least 1/3 of right side of map  */
+/* FR: is not place any cities/oils. */
+		x=3D getrandom( 1, MAX_X-2) ;
+		y=3D getrandom( 1, MAX_Y-2) ;
+		if( 0=3D=3Dvalidate_point( &x, &y, i ) )
+			 goto try_again;
+
+		/* Got good point.  Create region for it.  */
+		Add_Region( x, y, i ) ;
+
+	}	/* For each of the NUM_CBR regions. */
+
+
+     return(1);
+}
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D end of snippet =
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+
+Good luck!
+
+Robert.
+
+
+
+-----Original Message-----
+From: Kevin Wise [mailto:wisekb@cox.net]=20
+Sent: Thursday, June 09, 2005 3:28 PM
+To: generalhq@earthlink.net
+Subject: Re: Command HQ?
+
+Hello, it's me again.  Hope all is going well for you and this email=20
+address is still active.
+
+I'm finally getting a chance to work on this again, and making some=20
+progress.  I'm now working on placing armies, cities, etc as you suggest =
+
+below.  Could you share with me the locations of the=20
+cities/bases/oilfields in the various scenarios (including the=20
+methodology for choosing city/base locations in the ???? scenario)?  I=20
+assume it is something like a coordinate for each city, base, and oil=20
+field, and optionally a name. In ???? it seems that the locations are=20
+chosen randomly from a set of available locations, and some locations=20
+appear to exhibit a preference for a specific location type (some are=20
+always bases, for instance).
+
+Thanks,
+Kevin
+
+Robert E. Lee, Jr wrote:
+
+>Kevin,
+>
+>A few more thoughts:
+>
+>Let me also say that I want you to produce a game that is BETTER than =
+CHQ,
+>not a knock-off of it.
+>
+>I have many ideas on how to make CHQ better, that I was planning on
+>incorporating into General HQ game, and once you get to the stage that =
+your
+>game is as good as CHQ, then we can work on making it better. Keeping =
+your
+>game compatible with the original game, however, will really hold it =
+back
+>from becoming a better game in the future.
+>
+>Also, at this point in time, I suggest you focus on first trying to be =
+able
+>to display maps and getting the user interface done, being able to buy
+units
+>and move them across the screen. The second goal would be to get the
+>multi-player aspect working. Once you can prove that you can have two
+>computers talk to each other, and move the units from both machines =
+across
+>one common map, then we can worry about the interaction of the units, =
+and
+>how the actual battle sequences go. If I were you, I would worry about
+>including the multiplayer aspect before the game-playing aspect, since =
+that
+>is really a more difficult problem and will affect your fundamental =
+design
+>more.
+>
+>Cheers,
+>Robert
+> =20
+>
+
+
+
