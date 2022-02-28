@@ -1,7 +1,5 @@
 package kevw.games.chq.view;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -33,22 +31,26 @@ import kevw.games.chq.model.units.Unit;
 public class Board extends JComponent implements MouseInputListener, ActionListener, KeyListener {
 
   public static final double SIZE_FACTOR = 5.0d;
+  public static final long FRAME_RATE_MS = (long) (1000f / 30f);
   private static final int ACTION_SELECT_LOCATION = ActionEvent.ACTION_FIRST + 1;
   private static final int ACTION_ZOOM = ActionEvent.ACTION_FIRST + 2;
 
   private final DevelopmentView developmentView;
   private final UnitView unitView;
+  private final CursorView cursorView;
   private final JLabel statusLabel;
   private final World world;
   private final Dimension size;
   private final BufferedImage worldMapWithGeography;
   private final BufferedImage worldMapNoGeography;
   private final ArrayList<ActionListener> actionListeners = new ArrayList<>(2);
+  private Point mousePoint;
   private boolean geographyShown = true;
 
   public Board(JLabel statusLabel) {
     developmentView = new DevelopmentView();
     unitView = new UnitView();
+    cursorView = new CursorView(SIZE_FACTOR);
     this.statusLabel = statusLabel;
 
     try {
@@ -104,53 +106,13 @@ public class Board extends JComponent implements MouseInputListener, ActionListe
     this.getInputMap().put(key, key);
     //this.getActionMap().put(key, this);
     addKeyListener(this);
+
     Toolkit tk = Toolkit.getDefaultToolkit();
-    Dimension dim = tk.getBestCursorSize((int) (13 * SIZE_FACTOR), (int) (13 * SIZE_FACTOR));
-    BufferedImage crosshairImage = new BufferedImage(dim.width, dim.height,
+    Dimension cursorSize = tk.getBestCursorSize(16, 16);
+    BufferedImage blankCursorImage = new BufferedImage(cursorSize.width, cursorSize.height,
         BufferedImage.TYPE_INT_ARGB);
-    Graphics2D crosshairImageGraphics = crosshairImage.createGraphics();
-    Color transparent = new Color(255, 255, 255, 0); //Transparent
-    crosshairImageGraphics.setPaint(transparent);
-    crosshairImageGraphics.fillRect(0, 0, dim.width, dim.height);
-
-    double thickness = SIZE_FACTOR;
-    double halfthickness = Math.floor(SIZE_FACTOR / 2);
-    double antithickness = Math.floor(
-        Math.min((dim.width - (7 * thickness)) / 2 + (2 * thickness),
-            (13 * SIZE_FACTOR / 2) - (SIZE_FACTOR * 1.5f)));
-
-    double topX = antithickness + halfthickness;
-    double topY = halfthickness;
-    double topWidth = 2 * thickness;
-    double topHeight = antithickness - thickness;
-
-    crosshairImageGraphics.setPaint(Color.white);
-
-    //crosshairImageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    Rectangle.Double top = new Rectangle.Double(topX, topY, topWidth, topHeight);
-    Rectangle.Double bottom = new Rectangle.Double(topX, topY + topHeight + (4 * thickness),
-        topWidth,
-        topHeight);
-    Rectangle.Double left = new Rectangle.Double(topY, topX, topHeight, topWidth);
-    Rectangle.Double right = new Rectangle.Double(topY + topHeight + (4 * thickness), topX,
-        topHeight,
-        topWidth);
-
-    crosshairImageGraphics.fill(top);
-    crosshairImageGraphics.fill(bottom);
-    crosshairImageGraphics.fill(left);
-    crosshairImageGraphics.fill(right);
-
-    crosshairImageGraphics.setPaint(Color.black);
-    crosshairImageGraphics.setStroke(new BasicStroke((float) SIZE_FACTOR));
-    crosshairImageGraphics.draw(top);
-    crosshairImageGraphics.draw(bottom);
-    crosshairImageGraphics.draw(left);
-    crosshairImageGraphics.draw(right);
-
-    Point hotspot = new Point(dim.width / 2, dim.height / 2);
-    Cursor crosshairCursor = tk.createCustomCursor(crosshairImage, hotspot, "crosshair");
-    setCursor(crosshairCursor);
+    Cursor blankCursor = tk.createCustomCursor(blankCursorImage, new Point(0, 0), "blank");
+    setCursor(blankCursor);
   }
 
   public void actionPerformed(ActionEvent e) {
@@ -212,12 +174,14 @@ public class Board extends JComponent implements MouseInputListener, ActionListe
   }
 
   public void mouseExited(MouseEvent e) {
-    e = e;
+    this.mousePoint = null;
+    repaint(FRAME_RATE_MS);
   }
 
   public void mouseMoved(MouseEvent e) {
-    e = e;
     Point p = e.getPoint();
+    this.mousePoint = p;
+    repaint(FRAME_RATE_MS);
     if (statusLabel != null) {
       int i, j;
       i = (int) (p.x / SIZE_FACTOR);
@@ -255,6 +219,8 @@ public class Board extends JComponent implements MouseInputListener, ActionListe
     for (Unit unit : world.getUnits()) {
       unitView.paint(unit, g2);
     }
+
+    cursorView.paint(mousePoint, g2, this);
   }
 
   public synchronized void removeActionListener(ActionListener l) {
@@ -287,7 +253,7 @@ public class Board extends JComponent implements MouseInputListener, ActionListe
 
   public void toggleGeographyShown() {
     geographyShown = !geographyShown;
-    repaint();
+    repaint(FRAME_RATE_MS);
   }
 
   public void registerKeyboardAction(ActionListener anAction, String aCommand, KeyStroke aKeyStroke,
