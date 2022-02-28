@@ -1,4 +1,5 @@
 package kevw.games.chq.units;
 
-public abstract class SpaceUnit extends MobileUnit  {
+public abstract class SpaceUnit extends MobileUnit {
+
 }

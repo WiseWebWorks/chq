@@ -1,10 +1,13 @@
 package kevw.games.chq;
+
 import java.util.EventListener;
 
-public interface DevelopmentChangeListener extends EventListener  {
-	public void developmentConquered(DevelopmentChangeEvent e);
+public interface DevelopmentChangeListener extends EventListener {
 
-	public void developmentBombed(DevelopmentChangeEvent e);
+  void developmentConquered(DevelopmentChangeEvent e);
 
-	public void developmentAided(DevelopmentChangeEvent e);
+  void developmentBombed(DevelopmentChangeEvent e);
+
+  void developmentAided(DevelopmentChangeEvent e);
+
 }

@@ -1,17 +1,19 @@
 package kevw.games.turns;
 
-public interface TurnModerator  {
-	public void startGame(int turnTakerCount);
+public interface TurnModerator {
 
-	public void stopGame();
+  void startGame(int turnTakerCount);
 
-	public void connectTurnTaker(RemoteTurnTaker turnTaker);
+  void stopGame();
 
-	public void processNextTurn();
+  void connectTurnTaker(RemoteTurnTaker turnTaker);
 
-	public Object getGameState();
-	
-	public void takeTurn(Turn turn);
+  void processNextTurn();
 
-	public int getTurnTakerCount();
+  Object getGameState();
+
+  void takeTurn(Turn turn);
+
+  int getTurnTakerCount();
+
 }

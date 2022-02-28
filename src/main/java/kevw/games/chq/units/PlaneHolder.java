@@ -1,4 +1,5 @@
 package kevw.games.chq.units;
 
-public interface PlaneHolder  {
+public interface PlaneHolder {
+
 }

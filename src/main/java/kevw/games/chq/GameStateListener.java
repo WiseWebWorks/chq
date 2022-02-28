@@ -1,18 +1,21 @@
 package kevw.games.chq;
+
 import java.util.EventListener;
 
-public interface GameStateListener extends EventListener  {
-	public void gameStarted(GameStateEvent e);
+public interface GameStateListener extends EventListener {
 
-	public void gameWon(GameStateEvent e);
+  void gameStarted(GameStateEvent e);
 
-	public void gameCancelled(GameStateEvent e);
+  void gameWon(GameStateEvent e);
 
-	public void gamePaused(GameStateEvent e);
+  void gameCancelled(GameStateEvent e);
 
-	public void gameResumed(GameStateEvent e);
+  void gamePaused(GameStateEvent e);
 
-	public void gameSaved(GameStateEvent e);
+  void gameResumed(GameStateEvent e);
 
-	public void gameLoaded(GameStateEvent e);
+  void gameSaved(GameStateEvent e);
+
+  void gameLoaded(GameStateEvent e);
+
 }

@@ -7,58 +7,27 @@ package kevw.games;
  * @version 1.0
  */
 public abstract class Player {
-	//~ Static fields/initializers -----------------------------------------------------------------
 
-	/** DOCUMENT ME! */
-	protected static int playerNumber = 0;
+  protected static int playerNumber = 0;
 
-	//~ Instance fields ----------------------------------------------------------------------------
+  private String name;
 
-	/** DOCUMENT ME! */
-	private String name;
+  public Player() {
+    name = "Player #" + Integer.toString(playerNumber++);
+  }
 
-	//~ Constructors -------------------------------------------------------------------------------
+  public Player(String name) {
+    this.name = name;
+  }
 
-	/**
-	 * Creates a new Player object.
-	 */
-	public Player() {
-		name = "Player #" + Integer.toString(playerNumber++);
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	/**
-	 * Creates a new Player object.
-	 *
-	 * @param name DOCUMENT ME!
-	 */
-	public Player(String name) {
-		this.name = name;
-	}
+  public String getName() {
+    return name;
+  }
 
-	//~ Methods ------------------------------------------------------------------------------------
+  public abstract int getScore();
 
-	/**
-	 * DOCUMENT ME!
-	 *
-	 * @param name DOCUMENT ME!
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * DOCUMENT ME!
-	 *
-	 * @return DOCUMENT ME!
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * DOCUMENT ME!
-	 *
-	 * @return DOCUMENT ME!
-	 */
-	public abstract int getScore();
 }
