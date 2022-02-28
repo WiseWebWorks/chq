@@ -6,31 +6,35 @@
 
 package kevw.games.chq.view;
 
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class CHQApplicationFrame extends javax.swing.JFrame {
 
   private Board board1;
-  private javax.swing.JButton jButton1;
-  private javax.swing.JButton jButton2;
-  private javax.swing.JButton jButton3;
-  private javax.swing.JButton jButton4;
-  private javax.swing.JLabel jLabel1;
-  private javax.swing.JPanel jPanel1;
+  private JButton jButton1;
+  private JButton jButton2;
+  private JButton jButton3;
+  private JButton jButton4;
+  private JLabel jLabel1;
+  private JPanel jPanel1;
 
   public CHQApplicationFrame() {
     initComponents();
   }
 
   private void initComponents() {
-    jLabel1 = new javax.swing.JLabel();
+    jLabel1 = new JLabel();
     board1 = new Board();
-    jPanel1 = new javax.swing.JPanel();
-    jButton1 = new javax.swing.JButton();
-    jButton2 = new javax.swing.JButton();
-    jButton3 = new javax.swing.JButton();
-    jButton4 = new javax.swing.JButton();
+    jPanel1 = new JPanel();
+    jButton1 = new JButton();
+    jButton2 = new JButton();
+    jButton3 = new JButton();
+    jButton4 = new JButton();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,71 +60,45 @@ public class CHQApplicationFrame extends javax.swing.JFrame {
 
     jPanel1.setMinimumSize(new java.awt.Dimension(300, 180));
     jPanel1.setPreferredSize(new java.awt.Dimension(300, 180));
-    jButton1.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jButton1ActionPerformed(evt);
-      }
-    });
 
     jPanel1.add(jButton1);
-
-    jButton2.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jButton2ActionPerformed(evt);
-      }
-    });
-
     jPanel1.add(jButton2);
-
-    jButton3.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jButton3ActionPerformed(evt);
-      }
-    });
-
     jPanel1.add(jButton3);
-
-    jButton4.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jButton4ActionPerformed(evt);
-      }
-    });
-
     jPanel1.add(jButton4);
+
+    jButton1.addActionListener(this::jButton1ActionPerformed);
+    jButton2.addActionListener(this::jButton2ActionPerformed);
+    jButton3.addActionListener(this::jButton3ActionPerformed);
+    jButton4.addActionListener(this::jButton4ActionPerformed);
 
     getContentPane().add(jPanel1, java.awt.BorderLayout.SOUTH);
 
     pack();
   }
-  // </editor-fold>//GEN-END:initComponents
 
-  private void jButton1ActionPerformed(
-      java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-// TODO add your handling code here:
-  }//GEN-LAST:event_jButton1ActionPerformed
+  private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+    // TODO add your handling code here:
+  }
 
-  private void jButton2ActionPerformed(
-      java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+  private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
     board1.toggleGeographyShown();
-  }//GEN-LAST:event_jButton2ActionPerformed
+  }
 
-  private void jButton3ActionPerformed(
-      java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-// TODO add your handling code here:
-  }//GEN-LAST:event_jButton3ActionPerformed
+  private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+    // TODO add your handling code here:
+  }
 
-  private void jButton4ActionPerformed(
-      java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-// TODO add your handling code here:
-  }//GEN-LAST:event_jButton4ActionPerformed
+  private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
+    // TODO add your handling code here:
+  }
 
   private int i = 0;
 
-  private void board1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_board1KeyPressed
-// TODO add your handling code here:
+  private void board1KeyPressed(java.awt.event.KeyEvent evt) {
     int keyCode = evt.getKeyCode();
     jLabel1.setText(
-        evt.getKeyText(keyCode) + ":" + evt.getModifiersExText(evt.getModifiersEx()) + ":" + i++);
+        KeyEvent.getKeyText(keyCode) + ":" + InputEvent.getModifiersExText(evt.getModifiersEx())
+            + ":" + i++);
     switch (keyCode) {
       case KeyEvent.VK_LEFT:
         break;
@@ -132,11 +110,10 @@ public class CHQApplicationFrame extends javax.swing.JFrame {
         break;
     }
 //		board1.repaint();
-  }//GEN-LAST:event_board1KeyPressed
+  }
 
-  private void board1MouseClicked(
-      java.awt.event.MouseEvent evt) {//GEN-FIRST:event_board1MouseClicked
-// TODO add your handling code here:
-  }//GEN-LAST:event_board1MouseClicked
+  private void board1MouseClicked(java.awt.event.MouseEvent evt) {
+    // TODO add your handling code here:
+  }
 
 }
