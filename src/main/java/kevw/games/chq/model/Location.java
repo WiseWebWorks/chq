@@ -3,33 +3,8 @@ package kevw.games.chq.model;
 import java.awt.Color;
 import java.awt.Point;
 import kevw.games.chq.model.places.Development;
-import kevw.games.chq.model.units.Unit;
-import kevw.games.chq.view.Board;
 
 public class Location {
-
-  private int attritionLevel;
-  private int terrainType;
-  private Point point;
-
-  /**
-   * <TODO: Comment for Association here>
-   *
-   * @association <kevw.games.chq.BoardLocations> kevw.games.chq.Board
-   */
-  protected Board board;
-  /**
-   * <TODO: Comment for Association here>
-   *
-   * @association <kevw.games.chq.UnitLocation> kevw.games.chq.units.Unit
-   */
-  protected Unit piece;
-  /**
-   * <TODO: Comment for Association here>
-   *
-   * @association <kevw.games.chq.DevelopmentLocations> kevw.games.chq.CBR
-   */
-  private Development development;
 
   public static final int TERRAIN_OCEAN = 1;
   public static final int TERRAIN_FOREST = 2;
@@ -48,6 +23,11 @@ public class Location {
   public static final Color COLOR_JUNGLE = new Color(0, 168, 168);
   public static final Color COLOR_MOUNTAIN = new Color(168, 168, 168);
   public static final Color COLOR_DEVELOPED = new Color(84, 84, 84);
+
+  private int attritionLevel;
+  private final int terrainType;
+  private final Point point;
+  private Development development;
 
   public Location(int x, int y, int terrainType) throws IllegalArgumentException {
     this.point = new Point(x, y);

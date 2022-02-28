@@ -1,40 +1,25 @@
 package kevw.games.chq.model.units;
 
-import java.util.ArrayList;
-import java.util.List;
-import kevw.games.chq.event.UnitChangeEvent;
-import kevw.games.chq.event.UnitChangeListener;
+import java.awt.Point;
 import kevw.games.chq.model.Location;
 import kevw.games.chq.model.Player;
 
 public abstract class Unit {
 
-  protected Location loc;
-  protected Player player;
-  protected static transient ArrayList<UnitChangeListener> unitChangeListeners =
-      new ArrayList<>(2);
+  protected final Location location;
+  protected final Player player;
 
-  public Unit() {
-    fireUnitAdded();
+  public Unit(Location location, Player player) {
+    this.location = location;
+    this.player = player;
   }
 
-  public static synchronized void addUnitChangeListener(UnitChangeListener l) {
-    if (!unitChangeListeners.contains(l)) {
-      unitChangeListeners.add(l);
-    }
+  public Point getLocation() {
+    return location.getPoint();
   }
 
-  public static synchronized void removeUnitChangeListener(UnitChangeListener l) {
-    unitChangeListeners.remove(l);
-  }
-
-  protected void fireUnitAdded() {
-    List listeners = (List) unitChangeListeners.clone();
-    int count = listeners.size();
-
-    for (int i = 0; i < count; i++) {
-      ((UnitChangeListener) listeners.get(i)).unitAdded(new UnitChangeEvent(this));
-    }
+  public Player getPlayer() {
+    return player;
   }
 
 }

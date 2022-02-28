@@ -29,7 +29,7 @@ public class CHQApplicationFrame extends javax.swing.JFrame {
 
   private void initComponents() {
     jLabel1 = new JLabel();
-    board1 = new Board();
+    board1 = new Board(jLabel1);
     jPanel1 = new JPanel();
     jButton1 = new JButton();
     jButton2 = new JButton();
@@ -42,7 +42,6 @@ public class CHQApplicationFrame extends javax.swing.JFrame {
     jLabel1.setText("jLabel1");
     getContentPane().add(jLabel1, java.awt.BorderLayout.NORTH);
 
-    board1.setStatusLabel(jLabel1);
     board1.addKeyListener(new java.awt.event.KeyAdapter() {
       public void keyPressed(java.awt.event.KeyEvent evt) {
         board1KeyPressed(evt);
