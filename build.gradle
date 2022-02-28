@@ -21,7 +21,7 @@ compileJava {
 }
 
 application {
-  mainClass = 'kevw.games.chq.CHQApplet'
+  mainClass = 'kevw.games.chq.CHQApplication'
 }
 
 dependencies {
